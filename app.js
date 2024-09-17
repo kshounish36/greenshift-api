@@ -9,29 +9,35 @@ const gridTiedRoutes = require("./routes/gridTiedRoutes");
 const sequelize = require("./models").sequelize;
 const userRoutes = require("./routes/userRoutes");
 const leadRoutes = require("./routes/leadRoutes");
+const solarModuleDetailsRoutes = require("./routes/solarModuleDetailsRoute");
+const bosItemsRoutes = require("./routes/bosItemsRoutes");
 const authenticateToken = require("./middleware/auth");
 
 app.use(helmet());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    // origin: "https://greenshift.energy", // Replace with your frontend URL
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     // origin: "https://greenshift.energy", // Replace with your frontend URL
+//     credentials: true,
+//   })
+// );
+// app.options("*", cors());
+// app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const csrfProtection = csurf({ cookie: true });
-app.use(csrfProtection);
+// const csrfProtection = csurf({ cookie: true });
+// app.use(csrfProtection);
 
-app.get("/api/csrf-token", (req, res) => {
-  res.json({ csrfToken: req.csrfToken() });
-});
+// app.get("/api/csrf-token", (req, res) => {
+//   res.json({ csrfToken: req.csrfToken() });
+// });
 
 app.use("/api/grid-tied", authenticateToken, gridTiedRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api", leadRoutes);
+app.use("/api", solarModuleDetailsRoutes);
+app.use("/api", bosItemsRoutes);
 
 // Sync database
 sequelize
