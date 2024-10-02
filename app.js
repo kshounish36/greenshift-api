@@ -11,7 +11,6 @@ const userRoutes = require("./routes/userRoutes");
 const leadRoutes = require("./routes/leadRoutes");
 const solarModuleDetailsRoutes = require("./routes/solarModuleDetailsRoute");
 const bosItemsRoutes = require("./routes/bosItemsRoutes");
-const authenticateToken = require("./middleware/auth");
 
 app.use(helmet());
 // app.use(
@@ -33,7 +32,7 @@ app.use(cookieParser());
 //   res.json({ csrfToken: req.csrfToken() });
 // });
 
-app.use("/api/grid-tied", authenticateToken, gridTiedRoutes);
+app.use("/api/grid-tied", gridTiedRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api", leadRoutes);
 app.use("/api", solarModuleDetailsRoutes);

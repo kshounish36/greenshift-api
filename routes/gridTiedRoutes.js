@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const gridTiedSysController = require("../controllers/gridTiedController");
+const {
+  searchSystems,
+  updateBosItems,
+  getSysCapacity,
+} = require("../controllers/gridTiedController");
+const authenticateToken = require("../middleware/auth");
 
-router.post("/search", gridTiedSysController.searchSystems);
-router.post("/update", gridTiedSysController.updateBosItems);
-router.post("/getsyscapacity", gridTiedSysController.getSysCapacity);
+router.post("/search", authenticateToken, searchSystems);
+router.post("/update", authenticateToken, updateBosItems);
+router.post("/getsyscapacity", authenticateToken, getSysCapacity);
 
 module.exports = router;
