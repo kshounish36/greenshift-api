@@ -1,4 +1,5 @@
 const gridTiedSysService = require("../services/gridTiedService");
+const { GridTiedSys, HybridSys, OffGridSys } = require("../models");
 
 exports.searchSystems = async (req, res) => {
   try {
@@ -40,5 +41,37 @@ exports.updateBosItems = async (req, res) => {
   } catch (error) {
     console.error("Error updating BOS items:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getSysCapacity = async (req, res) => {
+  const { type, roof_typ, no_of_phase } = req.body;
+
+  let Model;
+  switch (type) {
+    case "grid-tied":
+      Model = GridTiedSys;
+      break;
+    case "off-grid":
+      Model = OffGridSys;
+      break;
+    case "hybrid":
+      Model = HybridSys;
+      break;
+    default:
+      throw new Error("Invalid system type");
+  }
+
+  try {
+    const dcCapacities = await Model.findAll({
+      where: {
+        roof_typ,
+        no_of_phase,
+      },
+      attributes: ["dc_capacity"],
+    });
+    res.status(200).json(dcCapacities);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch dc capacities" });
   }
 };

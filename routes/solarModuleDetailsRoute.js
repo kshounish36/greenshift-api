@@ -5,6 +5,7 @@ const {
   getOffGridSys,
   getHybridSys,
   updateSolarItem,
+  deleteSolarItem,
 } = require("../controllers/solarModuleDetailsController");
 const authenticateToken = require("../middleware/auth");
 
@@ -15,5 +16,6 @@ router.put("/updateitem", authenticateToken, updateSolarItem);
 router.get("/gridtied", authenticateToken, getGridTiedSys);
 router.get("/offgrid", authenticateToken, getOffGridSys);
 router.get("/hybrid", authenticateToken, getHybridSys);
+router.delete("/deletesolaritem", authenticateToken, deleteSolarItem);
 
 module.exports = router;

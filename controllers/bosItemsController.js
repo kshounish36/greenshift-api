@@ -55,8 +55,30 @@ const updateBOSItemDetails = async (req, res) => {
   }
 };
 
+const deleteBOSItem = async (req, res) => {
+  const { item_id } = req.body;
+  try {
+    const recordToDelete = await BosItems.findByPk(item_id);
+    if (!recordToDelete) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+
+    if (recordToDelete) {
+      await recordToDelete.destroy();
+      res.status(200).json({
+        message: "BOS Item deleted successfully",
+        data: recordToDelete,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
+};
+
 module.exports = {
   createBOSItemDetails,
   getBOSItems,
   updateBOSItemDetails,
+  deleteBOSItem,
 };

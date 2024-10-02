@@ -129,10 +129,43 @@ const updateSolarItem = async (req, res) => {
   }
 };
 
+const deleteSolarItem = async (req, res) => {
+  const { dcCapacity, sysType } = req.body;
+
+  let model;
+  if (sysType === "grid-tied") {
+    model = GridTiedSys;
+  } else if (sysType === "off-grid") {
+    model = OffGridSys;
+  } else if (sysType === "hybrid") {
+    model = HybridSys;
+  }
+
+  try {
+    const recordToDelete = await model.findByPk(dcCapacity);
+
+    if (!recordToDelete) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+
+    if (recordToDelete) {
+      await recordToDelete.destroy();
+      res.status(200).json({
+        message: "Solar Item deleted successfully",
+        data: recordToDelete,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
+};
+
 module.exports = {
   createItem,
   getGridTiedSys,
   getOffGridSys,
   getHybridSys,
   updateSolarItem,
+  deleteSolarItem,
 };

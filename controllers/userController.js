@@ -89,4 +89,31 @@ const updateUserDetails = async (req, res) => {
   }
 };
 
-module.exports = { login, getAllUsers, createNewUser, updateUserDetails };
+const deleteUser = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const recordToDelete = await User.findByPk(id);
+    if (!recordToDelete) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+
+    if (recordToDelete) {
+      await recordToDelete.destroy();
+      res.status(200).json({
+        message: "User deleted successfully",
+        data: recordToDelete,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
+};
+
+module.exports = {
+  login,
+  getAllUsers,
+  createNewUser,
+  updateUserDetails,
+  deleteUser,
+};
